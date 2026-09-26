@@ -1,6 +1,8 @@
 # Spectra Policy
 
-A plain static website displaying `hello`.
+A static paper website with the SPECTRA title and abstract.
+
+Live site: https://iclr202780.github.io/spectra-policy/
 
 ## Deploy
 

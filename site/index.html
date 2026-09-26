@@ -3,7 +3,116 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Spectra Policy</title>
+    <meta name="description" content="SPECTRA: Force-Gated Spectral Diffusion for Robot Manipulation. A force-aware spectral diffusion policy that learns when force feedback and finer motion are useful.">
+    <title>SPECTRA: Force-Gated Spectral Diffusion for Robot Manipulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,600|Noto+Sans:400,600&amp;display=swap" rel="stylesheet">
+    <style>
+      :root {
+        color-scheme: light;
+        --background: #fff;
+        --heading: #363636;
+        --text: #4a4a4a;
+        --divider: #f0f0f0;
+        --draft: #c62828;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Noto Sans", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      main {
+        max-width: 1008px;
+        margin: 0 auto;
+        padding: 0 24px 64px;
+      }
+
+      header { padding: 64px 0 48px; }
+
+      h1 {
+        margin: 0;
+        color: var(--heading);
+        font-family: "Google Sans", Arial, sans-serif;
+        font-size: 48px;
+        font-weight: 600;
+        line-height: 1.125;
+        text-align: center;
+        text-wrap: balance;
+      }
+
+      section { padding: 12px 0; }
+
+      h2 {
+        margin: 0;
+        color: var(--heading);
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 1.125;
+        text-align: center;
+      }
+
+      hr {
+        height: 2px;
+        margin: 24px 0;
+        border: 0;
+        background: var(--divider);
+      }
+
+      p {
+        margin: 0;
+        font-size: 18.667px;
+        line-height: 1.5;
+        text-align: justify;
+      }
+
+      .draft-results { color: var(--draft); }
+
+      @media (max-width: 600px) {
+        main { padding: 0 20px 40px; }
+        header { padding: 40px 0 36px; }
+        h1 { font-size: 32px; line-height: 1.2; }
+        h2 { font-size: 28px; }
+        p { font-size: 17px; line-height: 1.65; text-align: left; }
+      }
+    </style>
   </head>
-  <body>hello</body>
+  <body>
+    <main>
+      <header>
+        <h1>SPECTRA: FORCE-GATED SPECTRAL DIFFUSION FOR ROBOT MANIPULATION</h1>
+      </header>
+      <section aria-labelledby="abstract-title">
+        <h2 id="abstract-title">Abstract</h2>
+        <hr>
+        <p>
+          Robot manipulation requires smooth movements as well as precise
+          adjustments. Force and tactile feedback can help a robot understand
+          its interaction with an object, especially when visual observations
+          alone are insufficient. However, this feedback is not equally useful
+          throughout a task. Similarly, predicting finer motion details can
+          help the robot make necessary corrections, but can also reproduce
+          noise in demonstrations. An effective policy should therefore
+          learn when force feedback and finer motion are useful.
+          We introduce SPECTRA, a force-aware spectral diffusion policy
+          that makes this choice during execution. It combines a coarse
+          policy for smooth, low-frequency motion with a fine policy that
+          uses additional force/tactile feedback and can predict the full
+          range of motion frequencies. A learned gate uses recent force
+          history to select the policy that generates the next action chunk.
+          <span class="draft-results">Experiments on [evaluated tasks] show that
+          SPECTRA improves task success by [amount] over [baseline].
+          Comparisons with the individual policies further demonstrate
+          [supported benefit of selectively using force feedback and
+          fine motion].</span>
+        </p>
+      </section>
+    </main>
+  </body>
 </html>
