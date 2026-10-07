@@ -1,0 +1,73 @@
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/google-sans.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/noto-sans.ttf') format('truetype');
+}
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: #4a4a4a; font: 16px/1.5 'Noto Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: #3273dc; text-underline-offset: 4px; }
+a:focus-visible { outline: 3px solid #3273dc; outline-offset: 5px; }
+.skip-link { position: absolute; top: -80px; left: 16px; padding: 12px; background: #fff; z-index: 5; }
+.skip-link:focus { top: 12px; }
+.hero { max-width: 1008px; margin: 0 auto; padding: 48px 24px; text-align: center; }
+h1 { margin: 0 0 24px; color: #363636; font-family: 'Google Sans', sans-serif; font-size: 48px; font-weight: 600; line-height: 1.125; }
+.anonymous { margin: 0; font-family: 'Google Sans', sans-serif; font-size: 20px; line-height: 1.5; text-align: center; }
+section { max-width: 1008px; margin: 0 auto; padding: 48px 24px; }
+#abstract { padding-top: 12px; padding-bottom: 12px; font-size: 14pt; }
+h2 { margin: 0 0 24px; color: #363636; font-size: 32px; font-weight: 600; line-height: 1.125; text-align: center; }
+hr { height: 2px; margin: 24px 0; border: 0; background: #f5f5f5; }
+h3 { margin: 32px 0 24px; color: #363636; font-size: 24px; font-weight: 600; line-height: 1.125; text-align: center; }
+h3:first-child { margin-top: 0; }
+p { margin: 0 0 16px; text-align: justify; }
+p:last-child { margin-bottom: 0; }
+ul { margin: 0 0 24px; padding-left: 24px; }
+li { margin-bottom: 8px; }
+figure { margin: 24px 0; text-align: center; }
+figure:last-child { margin-bottom: 0; }
+figure > a { display: block; }
+figure img { display: block; width: 100%; height: auto; margin: 0 auto; }
+figcaption { margin: 12px 0 0; font-size: 14px; line-height: 1.5; text-align: justify; }
+#simulation figure { width: 80%; margin-inline: auto; }
+.equation { margin: 24px 0; overflow-x: auto; overflow-y: hidden; padding: 8px 2px; }
+.equation .katex-display { margin: 0; }
+#BibTeX h2 { text-align: left; }
+#BibTeX pre { margin: 0; padding: 20px 24px; overflow-x: auto; background: #f5f5f5; color: #4a4a4a; font: 14px/1.5 monospace; white-space: pre; tab-size: 2; }
+#BibTeX code { font: inherit; }
+.footer { padding: 48px 24px 96px; background: #fafafa; }
+.footer-content { max-width: 768px; margin: 0 auto; }
+.footer-content p { text-align: left; }
+@media (max-width: 600px) {
+  .hero { padding: 40px 24px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 28px; }
+  section { padding: 36px 24px; }
+  #abstract { font-size: 17px; }
+  p, figcaption { text-align: left; }
+  #simulation figure { width: 100%; }
+  .equation .katex-display { min-width: 700px; }
+}
+@media print {
+  .skip-link, .footer { display: none; }
+  .hero, section { padding: 20px 0; }
+  h1 { font-size: 28px; }
+  figure { break-inside: avoid; }
+}
+
+/* One restrained pair of task excerpts, following the reference's video layout. */
+.task-videos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 24px 0 8px; }
+.task-videos .task-video { margin: 0; min-width: 0; }
+.task-video figcaption { margin: 0 0 8px; font-size: 16px; text-align: center; }
+.task-video video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; background: #000; }
+.video-note { margin: 8px 0 24px; font-size: 13px; text-align: center; color: #666; }
+@media (max-width: 600px) { .task-videos { grid-template-columns: 1fr; gap: 20px; } }
+@media print { .task-videos, .video-note { display: none; } }

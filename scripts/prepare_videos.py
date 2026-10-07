@@ -1,7 +1,7 @@
 """Prepare two short website excerpts from a local source folder.
 
 Usage: python scripts/prepare_videos.py /path/to/source/videos
-Requires ffmpeg. Originals are never changed. Outputs stay in ignored site/static/.
+Requires ffmpeg. Originals are never changed. Public outputs are written to site/static/.
 """
 from pathlib import Path
 import argparse
