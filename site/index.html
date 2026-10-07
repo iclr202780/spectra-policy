@@ -8,6 +8,7 @@
   <title>SPECTRA: Force-Gated Spectral Diffusion for Robot Manipulation</title>
   <link rel="stylesheet" href="static/vendor/katex/katex.min.css">
   <link rel="stylesheet" href="static/style.css">
+  <script defer src="static/videos.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#abstract">Skip to content</a>
@@ -159,6 +160,23 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <figure><a href="static/media/real-robot-tasks.png" aria-label="Figure 4: Real-robot tasks — full size"><img src="static/media/real-robot-tasks.png" width="1188" height="1257" alt="Figure 4: Real-robot tasks" loading="lazy" decoding="async"></a><figcaption>Figure 4: Real-robot tasks. Four chronological stages of each task, observed from fixed and wrist-mounted cameras.</figcaption></figure>
 <h3>4.2.2 Results and Analysis</h3>
 <p>The five tasks test distinct demands on force-aware control. Jigglypuff placement and block stacking require accurate positioning and controlled release, while Coca-Cola placement requires gentle contact without audible sound. For wet-wipe extraction, a drop in resistance can signal complete removal. Whiteboard erasing requires sustained contact and consistent pressure against the board.</p>
+<div class="task-videos" aria-label="Real-robot task excerpts">
+  <figure class="task-video">
+    <figcaption id="wipe-video-title">Wet-wipe extraction</figcaption>
+    <video width="640" height="480" controls muted loop playsinline preload="none" data-play-in-view poster="static/videos/wipe-extraction.jpg" aria-labelledby="wipe-video-title">
+      <source src="static/videos/wipe-extraction.mp4" type="video/mp4">
+      Your browser does not support embedded video.
+    </video>
+  </figure>
+  <figure class="task-video">
+    <figcaption id="whiteboard-video-title">Whiteboard erasing</figcaption>
+    <video width="640" height="480" controls muted loop playsinline preload="none" data-play-in-view poster="static/videos/whiteboard-erasing.jpg" aria-labelledby="whiteboard-video-title">
+      <source src="static/videos/whiteboard-erasing.mp4" type="video/mp4">
+      Your browser does not support embedded video.
+    </video>
+  </figure>
+</div>
+<p class="video-note">8-second excerpts at original playback speed.</p>
 <figure><a href="static/media/real-robot-results.png" aria-label="Figure 5: Real-robot performance — full size"><img src="static/media/real-robot-results.png" width="1188" height="357" alt="Figure 5: Real-robot performance" loading="lazy" decoding="async"></a><figcaption>Figure 5: Real-robot performance. (a) Task success, including silent placement for Coca-Cola. (b) Percentage of text erased from the whiteboard. DP and FM predict actions without force conditioning. Bars show reported point estimates.</figcaption></figure>
 <p>Figure 5 shows that SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%. Together with matched simulation comparisons, these results support H1 (the value of force). The physical experiments evaluate the complete framework, while simulation ablations isolate the contributions of force conditioning, action bandwidth, and spectral normalization.</p>
 </div>

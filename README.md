@@ -33,6 +33,18 @@ The generated HTML includes static math markup and needs no browser JavaScript.
 The installed KaTeX version should match the vendored CSS and fonts (0.19.0).
 No authoring dependencies or build step are needed for deployment.
 
+Two eight-second task excerpts appear in the real-robot results section:
+wet-wipe extraction (0.6–8.6 seconds) and whiteboard erasing (0.4–8.4 seconds).
+Both use the chest-camera recordings at original speed. They are labeled by task,
+without asserting whether the supplied recordings are demonstrations or policy
+rollouts. Native playback controls remain available; automatic playback starts
+when clips enter view and is disabled for reduced-motion preferences.
+
+Run `python scripts/prepare_videos.py /path/to/source/videos` to regenerate the
+clips and posters with FFmpeg. Original recordings are unchanged; exports omit
+audio and source metadata. Video files, posters, styles, and playback JavaScript
+remain under ignored `site/static/` and are not included in Git pushes.
+
 The supplied PDF has empty author and XMP metadata, and was checked for email
 addresses, local paths, identifying annotations, and embedded attachments.
 These checks do not establish anonymity of the hosting account or repository
