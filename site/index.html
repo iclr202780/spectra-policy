@@ -25,20 +25,68 @@
 <section id="architecture" aria-labelledby="architecture-title">
 <h2 id="architecture-title">Architecture</h2><hr>
 <div class="section-body">
-<figure><img src="static/media/architecture.png" width="1239" height="729" alt="Figure 2: Inference and gate calibration in SPECTRA" loading="lazy" decoding="async"><figcaption>Figure 2: Inference and gate calibration in SPECTRA. (a) Recent force–torque history guides selection between a force-blind coarse policy with low-frequency support and a force-conditioned fine policy with full-spectrum support. Only the selected policy generates the next action chunk; the robot sequences illustrate the two alternatives. (b) Relative prediction errors of frozen policies on held-out demonstrations provide margin-based supervision for the gate. Colored bins indicate spectral support.</figcaption></figure>
-<p>We introduce SPECTRA, a force-aware spectral diffusion framework with independently trained coarse and fine policies. The coarse policy predicts low-frequency motion; the fine policy uses force/tactile memory and predicts the full action spectrum. Coefficient-wise normalization balances spectral signal-to-noise ratios during training. A gate uses recent force history to select one policy per action chunk, learning from their relative prediction errors on held-out demonstrations without manually labeled contact phases.</p>
+<figure><img src="static/media/architecture.png" width="1239" height="729" alt="Figure 2: Inference and gate calibration in SPECTRA" loading="lazy" decoding="async"></figure>
+<p>We introduce SPECTRA, a force-aware spectral diffusion framework with independently trained coarse and fine policies. To control the motion detail available to the coarse and fine policies, we use the discrete cosine transform (DCT) to express each action sequence as a weighted sum of cosine curves. The coarse policy predicts low-frequency motion; the fine policy uses force/tactile memory and predicts the full action spectrum. A gate uses recent force history to select one policy per action chunk, learning from their relative prediction errors on held-out demonstrations without manually labeled contact phases. This allows policy selection to change as the interaction unfolds.</p>
+</div>
+</section>
+<section id="force-bandwidth" aria-labelledby="force-bandwidth-title">
+<h2 id="force-bandwidth-title">Force Benefits Depend on Action Bandwidth</h2><hr>
+<div class="section-body">
+<p>We compare low-frequency and full-spectrum policies with and without force conditioning, keeping expert selection disabled to isolate the interaction between force and action bandwidth. Adding force provides no gain under low-frequency restriction, but improves full-spectrum success on four of five tasks.</p>
+<figure class="force-bandwidth-table">
+<div class="table-scroll" role="region" aria-label="Force feedback and action bandwidth results, scroll horizontally on small screens" tabindex="0">
+<table class="results-table bandwidth-table">
+<caption class="sr-only">Force benefits depend on action bandwidth</caption>
+<colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>
+<thead><tr><th scope="col" rowspan="2">Task</th>
+<th scope="colgroup" colspan="2">Low-frequency</th><th scope="colgroup" colspan="2">Full-spectrum</th></tr>
+<tr><th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th>
+<th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th></tr></thead><tbody>
+<tr><th scope="row">PegInsertionSide</th>
+<td>25 → 20</td>
+<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
+<td>25 → 27.5</td>
+<td><span class="gain-cell"><span>+2.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 8.33333%"></span></span></span></td>
+</tr>
+<tr><th scope="row">PickCube</th>
+<td>42.5 → 37.5</td>
+<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
+<td>50 → 62.5</td>
+<td><span class="gain-cell"><span>+12.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 41.6667%"></span></span></span></td>
+</tr>
+<tr><th scope="row">StackCube</th>
+<td>65 → 65</td>
+<td><span class="gain-cell"><span>0</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 0%"></span></span></span></td>
+<td>75 → 65</td>
+<td><span class="gain-cell"><span>-10</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 16.6667%; width: 33.3333%"></span></span></span></td>
+</tr>
+<tr><th scope="row">Coffee</th>
+<td>57.5 → 47.5</td>
+<td><span class="gain-cell"><span>-10</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 16.6667%; width: 33.3333%"></span></span></span></td>
+<td>67.5 → 75</td>
+<td><span class="gain-cell"><span>+7.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 25%"></span></span></span></td>
+</tr>
+<tr><th scope="row">Threading</th>
+<td>52.5 → 47.5</td>
+<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
+<td>60 → 67.5</td>
+<td><span class="gain-cell"><span>+7.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 25%"></span></span></span></td>
+</tr>
+</tbody></table></div></figure>
+<p>On PickCube, the effect of force changes from a 5-percentage-point decline to a 12.5-percentage-point gain when the full spectrum is available. StackCube is the exception: force leaves low-frequency performance unchanged and reduces full-spectrum success by 10 percentage points.</p>
 </div>
 </section>
 <section id="experiments" aria-labelledby="experiments-title">
 <h2 id="experiments-title">Evaluation and Results</h2><hr>
 <div class="section-body">
-<div id="simulation">
-<h3>Simulation Experiments</h3>
+<div id="simulation" class="evaluation-block" role="group" aria-labelledby="simulation-title">
+<h3 id="simulation-title">Simulation Performance</h3>
 <p>We evaluate SPECTRA on four ManiSkill (Mu et al., 2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. We report task success rates on independently generated scene configurations.</p>
-<p>We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space (Table 1). For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy.</p>
+<p>We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space. For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy.</p>
+<figure><img src="static/media/policy-architectures.png" width="1191" height="354" alt="(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA" loading="lazy" decoding="async"></figure>
 <figure class="simulation-table">
 <div class="table-scroll" role="region" aria-label="Simulation success rates, scroll horizontally on small screens" tabindex="0">
-<table class="results-table" aria-describedby="simulation-table-caption">
+<table class="results-table">
 <caption class="sr-only">Table 1: Policy architectures and simulation success rates (%)</caption>
 <colgroup span="2"></colgroup><colgroup span="4"></colgroup><colgroup span="2"></colgroup>
 <thead><tr><th scope="col" rowspan="2">Policy</th><th scope="col" rowspan="2">Space</th>
@@ -165,18 +213,70 @@
 <td><strong>80.0</strong></td>
 </tr>
 </tbody>
-</table></div>
-<h3>Policy Architectures</h3>
-<img src="static/media/policy-architectures.png" width="1191" height="354" alt="(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA" loading="lazy" decoding="async">
-<figcaption id="simulation-table-caption">Table 1: Policy architectures and simulation success rates (%). Matching colors and labels connect each architecture to its results. DP: diffusion policy; FM: flow matching. Best results are bold.</figcaption></figure>
-<p>Table 1 shows that SPECTRA outperforms force-blind action-space DP and FM on all six tasks. It achieves the highest success rates on PickCube, StackCube, Coffee, and Threading, and ties the best result on PlugCharger. Its mean success rate is 65.8%, compared with 52.9% for always using the fine policy and 50.0% for the strongest generic force-gating baseline, corresponding to gains of 12.9 and 15.8 percentage points, respectively. PegInsertionSide remains an exception: force-blind DCT-space FM achieves 45.0%, compared with 40.0% for SPECTRA.</p>
+</table></div></figure>
+<p>SPECTRA outperforms force-blind action-space DP and FM on all six tasks. It achieves the highest success rates on PickCube, StackCube, Coffee, and Threading, and ties the best result on PlugCharger. PegInsertionSide remains an exception: force-blind DCT-space FM achieves 45.0%, compared with 40.0% for SPECTRA.</p>
+<p>On Threading, adding force raises action-space DP success from 7.5% to 50.0% and FM success from 25.0% to 52.5%. However, the same change reduces Coffee success from 77.5% to 62.5% for DP and from 65.0% to 50.0% for FM, motivating selective use of force. Generic force gating nevertheless provides mixed benefits: for DCT-space DP, it improves Threading success over always-on force from 67.5% to 77.5%, but reduces Coffee success from 75.0% to 57.5%.</p>
+<p>SPECTRA’s mean success rate is 65.8%, compared with 52.9% for always using the fine policy and 50.0% for the strongest generic force-gating baseline, corresponding to gains of 12.9 and 15.8 percentage points, respectively. These results support the combined design of SPECTRA, which adapts force conditioning and action bandwidth together.</p>
 </div>
-<div id="real-robot">
-<h3>Real-Robot Experiments</h3>
+<div id="spectral-normalization" class="evaluation-block" role="group" aria-labelledby="spectral-normalization-title">
+<h3 id="spectral-normalization-title">Effect of Spectral Normalization</h3>
+<p>We compare SPECTRA with and without coefficient-wise spectral normalization, alongside action-space and DCT-space diffusion baselines.</p>
+<figure class="normalization-results">
+<div class="table-scroll" role="region" aria-label="Spectral normalization success rates, scroll horizontally on small screens" tabindex="0">
+<table class="results-table normalization-table">
+<caption class="sr-only">Effect of spectral signal-to-noise balancing: task success (%)</caption>
+<thead><tr>
+<th scope="col">Method</th>
+<th scope="col">PegInsertion</th>
+<th scope="col">PickCube</th>
+<th scope="col">PlugCharger</th>
+<th scope="col">StackCube</th>
+<th scope="col">Coffee</th>
+</tr></thead><tbody>
+<tr><th scope="row">DP (action, original)</th>
+<td>30.0</td>
+<td>55.0</td>
+<td>10.0</td>
+<td>60.0</td>
+<td>77.5</td>
+</tr>
+<tr><th scope="row">DP (action, w/o EqualSNR)</th>
+<td>30.0</td>
+<td>32.5</td>
+<td>0.0</td>
+<td>55.0</td>
+<td>72.5</td>
+</tr>
+<tr><th scope="row">DP (DCT, w/o EqualSNR)</th>
+<td>20.0</td>
+<td>45.0</td>
+<td>20.0</td>
+<td>67.5</td>
+<td>60.0</td>
+</tr>
+<tr class="normalization-variant"><th scope="row">SPECTRA w/o EqualSNR</th>
+<td>37.5</td>
+<td>70.0</td>
+<td><strong>32.5</strong></td>
+<td>67.5</td>
+<td>75.0</td>
+</tr>
+<tr class="normalization-variant"><th scope="row">SPECTRA</th>
+<td><strong>40.0</strong></td>
+<td><strong>77.5</strong></td>
+<td><strong>32.5</strong></td>
+<td><strong>82.5</strong></td>
+<td><strong>82.5</strong></td>
+</tr>
+</tbody></table></div></figure>
+<p>Normalization improves success on four of the five tasks and leaves PlugCharger performance unchanged. The largest gain is on StackCube, from 67.5% to 82.5%, followed by gains of 7.5 percentage points on both PickCube and Coffee. Frequency-resolved prediction errors are still needed to establish whether normalization improves fine-action learning while preserving coarse-motion accuracy.</p>
+</div>
+<div id="real-robot" class="evaluation-block" role="group" aria-labelledby="real-robot-title">
+<h3 id="real-robot-title">Real-Robot Performance</h3>
 <p>We evaluate SPECTRA on an OpenArm robot equipped with a fixed camera and a wrist-mounted camera.</p>
 <p>For each task, we collect 80 demonstration episodes, using 40 for policy training and 40 for gate calibration. Coca-Cola placement additionally requires placing the can without an audible contact sound, making gentle placement part of the success criterion. We evaluate whiteboard erasing by the percentage of text removed and the remaining tasks by success rate.</p>
-<figure><img src="static/media/real-robot-results.png" width="1188" height="357" alt="Figure 5: Real-robot performance" loading="lazy" decoding="async"><figcaption>Figure 5: Real-robot performance. (a) Task success, including silent placement for Coca-Cola. (b) Percentage of text erased from the whiteboard. DP and FM predict actions without force conditioning. Bars show reported point estimates.</figcaption></figure>
-<p>Figure 5 shows that SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%.</p>
+<figure><img src="static/media/real-robot-results.png" width="1188" height="357" alt="Figure 5: Real-robot performance" loading="lazy" decoding="async"></figure>
+<p>SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%.</p>
 <div class="task-videos" aria-label="Real-robot task excerpts">
   <figure class="task-video">
     <figcaption id="wipe-video-title">Wet-wipe extraction</figcaption>
@@ -195,53 +295,6 @@
 </div>
 <p class="video-note">8-second excerpts at original playback speed.</p>
 </div>
-</div>
-</section>
-<section id="force-bandwidth" aria-labelledby="force-bandwidth-title">
-<h2 id="force-bandwidth-title">When Force Feedback Helps</h2><hr>
-<div class="section-body">
-<figure class="force-bandwidth-table">
-<div class="table-scroll" role="region" aria-label="Force feedback and action bandwidth results, scroll horizontally on small screens" tabindex="0">
-<table class="results-table bandwidth-table" aria-describedby="force-bandwidth-caption">
-<caption class="sr-only">Figure 3: Force benefits depend on action bandwidth</caption>
-<colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>
-<thead><tr><th scope="col" rowspan="2">Task</th>
-<th scope="colgroup" colspan="2">Low-frequency</th><th scope="colgroup" colspan="2">Full-spectrum</th></tr>
-<tr><th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th>
-<th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th></tr></thead><tbody>
-<tr><th scope="row">PegInsertionSide</th>
-<td>25 → 20</td>
-<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
-<td>25 → 27.5</td>
-<td><span class="gain-cell"><span>+2.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 8.33333%"></span></span></span></td>
-</tr>
-<tr><th scope="row">PickCube</th>
-<td>42.5 → 37.5</td>
-<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
-<td>50 → 62.5</td>
-<td><span class="gain-cell"><span>+12.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 41.6667%"></span></span></span></td>
-</tr>
-<tr><th scope="row">StackCube</th>
-<td>65 → 65</td>
-<td><span class="gain-cell"><span>0</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 0%"></span></span></span></td>
-<td>75 → 65</td>
-<td><span class="gain-cell"><span>-10</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 16.6667%; width: 33.3333%"></span></span></span></td>
-</tr>
-<tr><th scope="row">Coffee</th>
-<td>57.5 → 47.5</td>
-<td><span class="gain-cell"><span>-10</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 16.6667%; width: 33.3333%"></span></span></span></td>
-<td>67.5 → 75</td>
-<td><span class="gain-cell"><span>+7.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 25%"></span></span></span></td>
-</tr>
-<tr><th scope="row">Threading</th>
-<td>52.5 → 47.5</td>
-<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
-<td>60 → 67.5</td>
-<td><span class="gain-cell"><span>+7.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 25%"></span></span></span></td>
-</tr>
-</tbody></table></div>
-<figcaption id="force-bandwidth-caption">Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing.</figcaption></figure>
-<p>We compare low-frequency and full-spectrum policies with and without force conditioning, keeping expert selection disabled to isolate the interaction between force and action bandwidth. Figure 3 shows that adding force provides no gain under low-frequency restriction, but improves full-spectrum success on four of five tasks. On PickCube, the effect of force changes from a 5-percentage-point decline to a 12.5-percentage-point gain when the full spectrum is available. StackCube is the exception: force leaves low-frequency performance unchanged and reduces full-spectrum success by 10 percentage points.</p>
 </div>
 </section>
 <section id="BibTeX" aria-labelledby="bibtex-title">

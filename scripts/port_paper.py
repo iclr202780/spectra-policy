@@ -1,10 +1,12 @@
 """Port selected paper passages into the CSP-style project page.
 
 Requires PyMuPDF for authoring only. The source PDF is never modified or served.
-Prose and captions are extracted from recorded source rectangles; only PDF line
+Prose and source captions are extracted from recorded rectangles; only PDF line
 wraps are normalized. Excerpts select complete original sentences without
-rewriting them, apart from explicitly recorded citation-formatting corrections.
-The manifest records both source passages and selections.
+rewriting them, apart from explicitly recorded citation-formatting corrections
+and approved website text edits.
+The manifest records both source passages and selections. Source captions remain
+in the manifest for provenance but are not displayed beneath figures or tables.
 """
 from pathlib import Path
 import re, html, hashlib, json
@@ -26,7 +28,7 @@ def clean(s):
 def extract(page,y0,y1):
     return clean(DOC[page-1].get_textbox(pdf.Rect(103,y0,510,y1)))
 
-def paragraph(*rects, excerpts=None, citation_corrections=()):
+def paragraph(*rects, excerpts=None, citation_corrections=(), text_corrections=()):
     source_text=' '.join(extract(*r) for r in rects)
     text=source_text
     if excerpts:
@@ -36,13 +38,15 @@ def paragraph(*rects, excerpts=None, citation_corrections=()):
             last=source_text.index(end,first)+len(end)
             selected.append(source_text[first:last])
         text=' '.join(selected)
-    for original,corrected in citation_corrections:
+    for original,corrected in (*citation_corrections, *text_corrections):
         assert text.count(original)==1
         text=text.replace(original,corrected)
     entry={'type':'paragraph','source_rects':rects,
            'source_text':source_text,'excerpts':excerpts,'text':text}
     if citation_corrections:
         entry['citation_corrections']=citation_corrections
+    if text_corrections:
+        entry['text_corrections']=text_corrections
     CONTENT.append(entry)
     return '<p>'+html.escape(text)+'</p>\n'
 
@@ -52,7 +56,7 @@ def bullets(page,y0,y1):
     CONTENT.append({'type':'list','source_rects':[(page,y0,y1)],'items':items})
     return '<ul>\n'+''.join('<li>'+html.escape(v)+'</li>\n' for v in items)+'</ul>\n'
 
-def figure(name,page,rect,caption_bounds):
+def figure(name,page,rect,caption_bounds,alt=None):
     dest=ROOT/'site/static/media'/f'{name}.png'
     dest.parent.mkdir(parents=True,exist_ok=True)
     pix=DOC[page-1].get_pixmap(matrix=pdf.Matrix(3,3),clip=pdf.Rect(*rect),alpha=False)
@@ -60,11 +64,14 @@ def figure(name,page,rect,caption_bounds):
     caption=extract(page,*caption_bounds)
     CONTENT.append({'type':'figure','page':page,'crop':rect,'caption_bounds':caption_bounds,
                     'file':str(dest.relative_to(ROOT)),'caption':caption})
-    alt=caption.split('. ')[0]
-    return f'<figure><img src="static/media/{name}.png" width="{pix.width}" height="{pix.height}" alt="{html.escape(alt)}" loading="lazy" decoding="async"><figcaption>{html.escape(caption)}</figcaption></figure>\n'
+    alt=alt or caption.split('. ')[0]
+    return f'<figure><img src="static/media/{name}.png" width="{pix.width}" height="{pix.height}" alt="{html.escape(alt)}" loading="lazy" decoding="async"></figure>\n'
 
 def section(key,title,body):
     return f'<section id="{key}" aria-labelledby="{key}-title">\n<h2 id="{key}-title">{title}</h2><hr>\n<div class="section-body">\n{body}</div>\n</section>\n'
+
+def evaluation_block(key,title,body):
+    return f'<div id="{key}" class="evaluation-block" role="group" aria-labelledby="{key}-title">\n<h3 id="{key}-title">{title}</h3>\n{body}</div>\n'
 
 def simulation_table():
     source_file='scripts/simulation_table.json'
@@ -72,18 +79,12 @@ def simulation_table():
     rows=[row for group in data['groups'] for row in group['rows']]
     best=[max(float(row[i]) for row in rows) for i in range(2,8)]
     caption=extract(6,436,458)
-    # Keep the original diagrams, separate from the selectable table cells.
-    crop=[108,84,505,202]
-    dest=ROOT/'site/static/media/policy-architectures.png'
-    pix=DOC[5].get_pixmap(matrix=pdf.Matrix(3,3),clip=pdf.Rect(*crop),alpha=False)
-    pix.save(dest)
     CONTENT.append({'type':'table','page':6,'source_rect':[108,209,505,433],
                     'source_file':source_file,'data':data,'caption':caption,
-                    'caption_bounds':[436,458],'architecture_crop':crop,
-                    'architecture_file':str(dest.relative_to(ROOT))})
+                    'caption_bounds':[436,458]})
     parts=['<figure class="simulation-table">',
            '<div class="table-scroll" role="region" aria-label="Simulation success rates, scroll horizontally on small screens" tabindex="0">',
-           '<table class="results-table" aria-describedby="simulation-table-caption">',
+           '<table class="results-table">',
            '<caption class="sr-only">Table 1: Policy architectures and simulation success rates (%)</caption>',
            '<colgroup span="2"></colgroup><colgroup span="4"></colgroup><colgroup span="2"></colgroup>',
            '<thead><tr><th scope="col" rowspan="2">Policy</th><th scope="col" rowspan="2">Space</th>',
@@ -101,10 +102,31 @@ def simulation_table():
                 parts.append('<td>'+text+'</td>')
             parts.append('</tr>')
         parts.append('</tbody>')
-    parts.extend(['</table></div>',
-                  '<h3>Policy Architectures</h3>',
-                  f'<img src="static/media/policy-architectures.png" width="{pix.width}" height="{pix.height}" alt="(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA" loading="lazy" decoding="async">',
-                  f'<figcaption id="simulation-table-caption">{html.escape(caption)}</figcaption></figure>'])
+    parts.append('</table></div></figure>')
+    return '\n'.join(parts)+'\n'
+
+def normalization_table():
+    source_file='scripts/normalization_table.json'
+    data=json.loads((ROOT/source_file).read_text())
+    best=[max(float(row[i]) for row in data['rows']) for i in range(1,6)]
+    CONTENT.append({'type':'table','page':7,'source_rect':[107,119,505,214],
+                    'source_file':source_file,'data':data,'caption':extract(7,84,115),
+                    'caption_bounds':[84,115]})
+    parts=['<figure class="normalization-results">',
+           '<div class="table-scroll" role="region" aria-label="Spectral normalization success rates, scroll horizontally on small screens" tabindex="0">',
+           '<table class="results-table normalization-table">',
+           '<caption class="sr-only">Effect of spectral signal-to-noise balancing: task success (%)</caption>',
+           '<thead><tr>']
+    parts.extend('<th scope="col">'+html.escape(label)+'</th>' for label in data['columns'])
+    parts.append('</tr></thead><tbody>')
+    for row in data['rows']:
+        row_class=' class="normalization-variant"' if row[0].startswith('SPECTRA') else ''
+        parts.append(f'<tr{row_class}><th scope="row">{html.escape(row[0])}</th>')
+        for i,value in enumerate(row[1:]):
+            text=f'<strong>{value}</strong>' if float(value)==best[i] else value
+            parts.append('<td>'+text+'</td>')
+        parts.append('</tr>')
+    parts.append('</tbody></table></div></figure>')
     return '\n'.join(parts)+'\n'
 
 def force_bandwidth_table():
@@ -116,8 +138,8 @@ def force_bandwidth_table():
                     'caption_bounds':[391,433]})
     parts=['<figure class="force-bandwidth-table">',
            '<div class="table-scroll" role="region" aria-label="Force feedback and action bandwidth results, scroll horizontally on small screens" tabindex="0">',
-           '<table class="results-table bandwidth-table" aria-describedby="force-bandwidth-caption">',
-           '<caption class="sr-only">Figure 3: Force benefits depend on action bandwidth</caption>',
+           '<table class="results-table bandwidth-table">',
+           '<caption class="sr-only">Force benefits depend on action bandwidth</caption>',
            '<colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>',
            '<thead><tr><th scope="col" rowspan="2">Task</th>',
            '<th scope="colgroup" colspan="2">Low-frequency</th><th scope="colgroup" colspan="2">Full-spectrum</th></tr>',
@@ -140,40 +162,70 @@ def force_bandwidth_table():
                          f'<span class="gain-bar" style="left: {left:g}%; width: {width:g}%"></span>'
                          '</span></span></td>')
         parts.append('</tr>')
-    parts.extend(['</tbody></table></div>',
-                  f'<figcaption id="force-bandwidth-caption">{html.escape(caption)}</figcaption></figure>'])
+    parts.append('</tbody></table></div></figure>')
     return '\n'.join(parts)+'\n'
 
 abstract=paragraph((1,214,386))
 architecture=figure('architecture',3,[100,81,513,324],[329,380])
-architecture+=paragraph((1,688,734),(2,285,341),excerpts=[
-    ('We introduce SPECTRA,','without manually labeled contact phases.')])
-simulation='<div id="simulation">\n<h3>Simulation Experiments</h3>\n'
-simulation+=paragraph((5,382,482),excerpts=[
+architecture+=paragraph((1,688,734),(2,285,341),(3,605,630),(5,153,209),excerpts=[
+    ('We introduce SPECTRA,','independently trained coarse and fine policies.'),
+    ('To control the motion detail','a weighted sum of cosine curves.'),
+    ('The coarse policy predicts','predicts the full action spectrum.'),
+    ('A gate uses recent force history','without manually labeled contact phases.'),
+    ('This allows policy selection','as the interaction unfolds.')])
+simulation=paragraph((5,382,482),excerpts=[
     ('We evaluate SPECTRA','50 for gate calibration.'),
     ('We report task success rates','independently generated scene configurations.')],
     citation_corrections=[('ManiSkill Mu et al. (2021) tasks','ManiSkill (Mu et al., 2021) tasks')])
 simulation+=paragraph((5,505,594),excerpts=[
-    ('We compare Diffusion Policy','force-conditioned full-spectrum policy.')])
+    ('We compare Diffusion Policy','force-conditioned full-spectrum policy.')],
+    text_corrections=[(' (Table 1)','')])
+simulation+=figure('policy-architectures',6,[108,84,505,202],[436,458],
+    alt='(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA')
 simulation+=simulation_table()
-simulation+=paragraph((5,616,684))+'</div>\n'
-real='<div id="real-robot">\n<h3>Real-Robot Experiments</h3>\n'
-real+=paragraph((7,533,612),excerpts=[
+simulation+=paragraph((5,616,684),excerpts=[
+    ('Table 1 shows','ties the best result on PlugCharger.'),
+    ('PegInsertionSide remains','40.0% for SPECTRA.')],
+    text_corrections=[('Table 1 shows that SPECTRA','SPECTRA')])
+simulation+=paragraph((5,688,734),(6,466,533),excerpts=[
+    ('On Threading,','motivating selective use of force.'),
+    ('Generic force gating','Coffee success from 75.0% to 57.5%.')])
+simulation+=paragraph((5,616,684),(5,688,734),(6,466,533),excerpts=[
+    ('Its mean success rate','15.8 percentage points, respectively.'),
+    ('These results support','force conditioning and action bandwidth together.')],
+    text_corrections=[('Its mean success rate','SPECTRA’s mean success rate')])
+normalization=paragraph((6,555,645),excerpts=[
+    ('We compare SPECTRA','DCT-space diffusion baselines.')])
+normalization+=normalization_table()
+normalization+=paragraph((6,555,645),excerpts=[
+    ('Table 2 shows','on both PickCube and Coffee.'),
+    ('Frequency-resolved prediction errors','preserving coarse-motion accuracy.')],
+    text_corrections=[('Table 2 shows that normalization','Normalization')])
+real=paragraph((7,533,612),excerpts=[
     ('We evaluate SPECTRA','a wrist-mounted camera.')])
 real+=paragraph((7,633,734),excerpts=[
     ('For each task,','the remaining tasks by success rate.')])
 real+=figure('real-robot-results',9,[108,81,504,200],[209,241])
 real+=paragraph((8,599,689),excerpts=[
-    ('Figure 5 shows','below FM’s 90%.')])
-real+=(ROOT/'scripts/real_robot_videos.html').read_text()+'</div>\n'
-interaction=force_bandwidth_table()
+    ('Figure 5 shows','below FM’s 90%.')],
+    text_corrections=[('Figure 5 shows that SPECTRA','SPECTRA')])
+real+=(ROOT/'scripts/real_robot_videos.html').read_text()
+evaluation=''.join([
+    evaluation_block('simulation','Simulation Performance',simulation),
+    evaluation_block('spectral-normalization','Effect of Spectral Normalization',normalization),
+    evaluation_block('real-robot','Real-Robot Performance',real),
+])
+interaction=paragraph((6,667,723),(7,441,508),excerpts=[
+    ('We compare low-frequency','full-spectrum success on four of five tasks.')],
+    text_corrections=[('Figure 3 shows that adding force','Adding force')])
+interaction+=force_bandwidth_table()
 interaction+=paragraph((6,667,723),(7,441,508),excerpts=[
-    ('We compare low-frequency','full-spectrum success by 10 percentage points.')])
+    ('On PickCube,','full-spectrum success by 10 percentage points.')])
 body=''.join([
     section('abstract','Abstract',abstract),
     section('architecture','Architecture',architecture),
-    section('experiments','Evaluation and Results',simulation+real),
-    section('force-bandwidth','When Force Feedback Helps',interaction),
+    section('force-bandwidth','Force Benefits Depend on Action Bandwidth',interaction),
+    section('experiments','Evaluation and Results',evaluation),
 ])
 index=ROOT/'site/index.html';current=index.read_text()
 citation=re.search(r'<section id="BibTeX".*?</section>',current,re.S).group()
@@ -181,9 +233,9 @@ current=re.sub(r'<main(?:\s[^>]*)?>.*?</main>',lambda _:'<main>\n'+body+citation
 current=current.replace('href="#paper"','href="#abstract"')
 current=current.replace('  <link rel="stylesheet" href="static/vendor/katex/katex.min.css">\n','')
 index.write_text(current)
-manifest={'source_sha256':SOURCE_HASH,'scope':'Selected verbatim passages: abstract, architecture, simulation and real-robot results, and force-versus-bandwidth ablation. Original captions and in-text citations retained. No PDF download.',
+manifest={'source_sha256':SOURCE_HASH,'scope':'Selected paper passages: abstract, architecture, force-versus-bandwidth ablation, simulation performance, policy comparisons, value of force feedback, spectral normalization, learned policy selection, and real-robot performance. In-text citations retained; approved text and citation formatting edits recorded. Source captions retained here for provenance, not displayed on the website. No PDF download.',
           'content':CONTENT}
 (ROOT/'paper-port-manifest.json').write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+'\n')
 assert hashlib.sha256(SOURCE.read_bytes()).hexdigest()==SOURCE_HASH
 assert not list((ROOT/'site').rglob('*.pdf'))
-print('Generated curated project page with verbatim excerpts, 2 HTML results tables, paper figures, and 2 short videos.')
+print('Generated curated project page with selected paper excerpts, 3 HTML results tables, paper figures, and 2 short videos.')

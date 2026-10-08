@@ -61,7 +61,11 @@ figcaption { margin: 12px 0 0; font-size: 14px; line-height: 1.5; text-align: ju
 .gain-track { position: relative; display: block; flex: 0 0 88px; height: 20px; }
 .gain-track::before { content: ''; position: absolute; left: 50%; top: -10px; bottom: -10px; border-left: 1px solid #aaa; }
 .gain-bar { position: absolute; top: 2px; bottom: 2px; background: #555; }
-#real-robot { margin-top: 48px; }
+.evaluation-block + .evaluation-block { margin-top: 48px; padding-top: 48px; border-top: 2px solid #f5f5f5; }
+.normalization-table { min-width: 740px; }
+.normalization-table th, .normalization-table td { padding: 8px; }
+.normalization-table thead tr:last-child th:first-child { text-align: left; }
+.normalization-variant:first-child, tr:not(.normalization-variant) + .normalization-variant { border-top: 1px solid #222; }
 .equation { margin: 24px 0; overflow-x: auto; overflow-y: hidden; padding: 8px 2px; }
 .equation .katex-display { margin: 0; }
 #BibTeX h2 { text-align: left; }

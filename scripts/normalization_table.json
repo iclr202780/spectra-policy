@@ -1,0 +1,10 @@
+{
+  "columns": ["Method", "PegInsertion", "PickCube", "PlugCharger", "StackCube", "Coffee"],
+  "rows": [
+    ["DP (action, original)", "30.0", "55.0", "10.0", "60.0", "77.5"],
+    ["DP (action, w/o EqualSNR)", "30.0", "32.5", "0.0", "55.0", "72.5"],
+    ["DP (DCT, w/o EqualSNR)", "20.0", "45.0", "20.0", "67.5", "60.0"],
+    ["SPECTRA w/o EqualSNR", "37.5", "70.0", "32.5", "67.5", "75.0"],
+    ["SPECTRA", "40.0", "77.5", "32.5", "82.5", "82.5"]
+  ]
+}
