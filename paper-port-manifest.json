@@ -1,6 +1,6 @@
 {
   "source_sha256": "b7501d11a4c46b5d35093fc3ee41735c2182004430bcac54b5dd0cd89919dd8b",
-  "scope": "Main paper, pages 1–10; excludes Related Work, References, and Appendices. In-text citations retained. No PDF download.",
+  "scope": "Selected verbatim passages: abstract, architecture, simulation and real-robot results, and force-versus-bandwidth ablation. Original captions and in-text citations retained. No PDF download.",
   "content": [
     {
       "type": "paragraph",
@@ -11,117 +11,9 @@
           386
         ]
       ],
+      "source_text": "Robot manipulation requires smooth movements as well as precise adjustments. Force and tactile feedback can help a robot understand its interaction with an object, especially when visual observations alone are insufficient. However, this feedback is not equally useful throughout a task. Similarly, predicting finer motion details can help the robot make necessary corrections, but can also reproduce noise in demonstrations. An effective policy should therefore learn when force feedback and finer motion are useful. We introduce SPECTRA, a force-aware spectral diffusion policy that makes this choice during execution. It combines a coarse policy for smooth, low-frequency motion with a fine policy that uses additional force/tactile feedback and can predict the full range of motion frequencies. A learned gate uses recent force history to select the policy that generates the next action chunk. Experiments on simulated and real-robot manipulation tasks show that SPECTRA improves real-robot task success by up to 20 percentage points over the strongest evaluated baseline on the corresponding task. Comparisons with individual policies further show that the benefit of force feedback depends on action bandwidth, supporting its selective use with fine motion prediction.",
+      "excerpts": null,
       "text": "Robot manipulation requires smooth movements as well as precise adjustments. Force and tactile feedback can help a robot understand its interaction with an object, especially when visual observations alone are insufficient. However, this feedback is not equally useful throughout a task. Similarly, predicting finer motion details can help the robot make necessary corrections, but can also reproduce noise in demonstrations. An effective policy should therefore learn when force feedback and finer motion are useful. We introduce SPECTRA, a force-aware spectral diffusion policy that makes this choice during execution. It combines a coarse policy for smooth, low-frequency motion with a fine policy that uses additional force/tactile feedback and can predict the full range of motion frequencies. A learned gate uses recent force history to select the policy that generates the next action chunk. Experiments on simulated and real-robot manipulation tasks show that SPECTRA improves real-robot task success by up to 20 percentage points over the strongest evaluated baseline on the corresponding task. Comparisons with individual policies further show that the benefit of force feedback depends on action bandwidth, supporting its selective use with fine motion prediction."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          1,
-          440,
-          530
-        ]
-      ],
-      "text": "Reliable robot manipulation requires both smooth movements and precise adjustments when grasping and handling objects. Visual observations help a robot locate objects and plan its motion, but they do not fully describe the interaction between the gripper and the object. Small misalignments, unexpected resistance, or changes in grip may be difficult to detect from images, especially when the gripper obscures the interaction. Force and tactile feedback provide complementary information that can help the robot detect these conditions and adjust its actions. This motivates force-aware manipulation policies that combine visual observations with feedback from physical interaction to achieve more reliable execution."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          1,
-          534,
-          623
-        ]
-      ],
-      "text": "However, adding force and tactile inputs does not by itself ensure better actions. Their usefulness changes throughout execution: they may reveal an important interaction at one moment and provide little information beyond visual observations at another. Even when this feedback is informative, the policy must be able to translate it into suitable corrections. Restricting predictions to smooth motion can limit rapid adjustments, while allowing finer motion detail can also reproduce unwanted variation in demonstrations. These challenges connect the use of sensory information with the actions a policy can express. An effective approach should therefore consider both when force feedback is useful and when additional motion detail is needed."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          1,
-          628,
-          684
-        ]
-      ],
-      "text": "We use the frequency content of action sequences to control motion detail: low frequencies describe smooth motion, while higher frequencies allow faster changes that may support corrections. Our key idea is to adapt this detail together with force feedback, using coarse motion when sufficient and enabling force-conditioned, full-spectrum prediction when it improves action prediction. Learning this choice from data accommodates changing task demands."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          1,
-          688,
-          734
-        ],
-        [
-          2,
-          285,
-          341
-        ]
-      ],
-      "text": "We introduce SPECTRA, a force-aware spectral diffusion framework with independently trained coarse and fine policies. The coarse policy predicts low-frequency motion; the fine policy uses force/tactile memory and predicts the full action spectrum. Coefficient-wise normalization balances spectral signal-to-noise ratios during training. A gate uses recent force history to select one policy per action chunk, learning from their relative prediction errors on held-out demonstrations without manually labeled contact phases. Simulation and real-robot experiments demonstrate gains across multiple tasks, including real-robot improvements of up to 20 percentage points over the strongest baseline per task. Ablations support both spectral balancing and the connection between force benefits and high-frequency action support. Our main contributions are as follows:"
-    },
-    {
-      "type": "list",
-      "source_rects": [
-        [
-          2,
-          346,
-          424
-        ]
-      ],
-      "items": [
-        "We propose SPECTRA, a force-aware spectral diffusion framework that combines a coarse policy for low-frequency motion with a force-conditioned fine policy that predicts the full action spectrum.",
-        "We introduce a learned gate that uses recent force history to select between the two policies. Supervision comes from their relative prediction errors on held-out examples, without requiring manually labeled contact phases.",
-        "We validate SPECTRA in simulation and on real robots, showing gains over force-blind and force-aware baselines. Ablations support jointly selecting force conditioning and action bandwidth."
-      ]
-    },
-    {
-      "type": "figure",
-      "page": 2,
-      "crop": [
-        108,
-        83,
-        504,
-        230
-      ],
-      "caption_bounds": [
-        236,
-        278
-      ],
-      "file": "site/static/media/overview.png",
-      "caption": "Figure 1: Match sensing and action bandwidth to the current interaction. A force-blind student predicts continuous actions in a low-frequency subspace; a force-aware teacher predicts the full spectrum. A gate uses recent force and torque to choose an expert, supervised by their relative action-prediction errors on calibration examples. The scenes and traces are conceptual illustrations, not measurements or observed routing outcomes."
-    },
-    {
-      "type": "method",
-      "source_rects": [
-        [
-          3,
-          429,
-          734
-        ],
-        [
-          4,
-          82,
-          735
-        ],
-        [
-          5,
-          102,
-          209
-        ]
-      ],
-      "source_file": "scripts/method.html",
-      "equations": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ]
     },
     {
       "type": "figure",
@@ -143,28 +35,24 @@
       "type": "paragraph",
       "source_rects": [
         [
-          5,
-          239,
-          263
-        ]
-      ],
-      "text": "We evaluate how force feedback, action frequency, and learned policy selection affect manipulation performance through four hypotheses:"
-    },
-    {
-      "type": "list",
-      "source_rects": [
+          1,
+          688,
+          734
+        ],
         [
-          5,
-          268,
-          358
+          2,
+          285,
+          341
         ]
       ],
-      "items": [
-        "H1 (the value of force): Force feedback improves task success on some tasks but can reduce it on others.",
-        "H2 (balanced spectral learning): Balancing signal-to-noise ratios across action frequencies improves task success.",
-        "H3 (force and motion detail): Force feedback provides greater benefit when a policy can predict the full action spectrum than when it is restricted to low-frequency motion.",
-        "H4 (learned policy selection): A gate trained from relative prediction errors improves task success over fixed or contact-triggered selection between the same coarse and fine policies."
-      ]
+      "source_text": "We introduce SPECTRA, a force-aware spectral diffusion framework with independently trained coarse and fine policies. The coarse policy predicts low-frequency motion; the fine policy uses force/tactile memory and predicts the full action spectrum. Coefficient-wise normalization balances spectral signal-to-noise ratios during training. A gate uses recent force history to select one policy per action chunk, learning from their relative prediction errors on held-out demonstrations without manually labeled contact phases. Simulation and real-robot experiments demonstrate gains across multiple tasks, including real-robot improvements of up to 20 percentage points over the strongest baseline per task. Ablations support both spectral balancing and the connection between force benefits and high-frequency action support. Our main contributions are as follows:",
+      "excerpts": [
+        [
+          "We introduce SPECTRA,",
+          "without manually labeled contact phases."
+        ]
+      ],
+      "text": "We introduce SPECTRA, a force-aware spectral diffusion framework with independently trained coarse and fine policies. The coarse policy predicts low-frequency motion; the fine policy uses force/tactile memory and predicts the full action spectrum. Coefficient-wise normalization balances spectral signal-to-noise ratios during training. A gate uses recent force history to select one policy per action chunk, learning from their relative prediction errors on held-out demonstrations without manually labeled contact phases."
     },
     {
       "type": "paragraph",
@@ -175,7 +63,18 @@
           482
         ]
       ],
-      "text": "We evaluate SPECTRA on four ManiSkill Mu et al. (2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. Both suites run in MuJoCo, with ManiSkill tasks adapted to this simulator. Force-aware policies receive three-axis force and torque measurements from a simulated sensor between the arm and parallel-jaw gripper; MimicGen measurements are recovered by restoring recorded simulator states. ManiSkill additionally sums the 3D force magnitudes over all gripper contacts using mj_contactForce, giving seven force-related channels versus six for MimicGen. We report task success rates on independently generated scene configurations."
+      "source_text": "We evaluate SPECTRA on four ManiSkill Mu et al. (2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. Both suites run in MuJoCo, with ManiSkill tasks adapted to this simulator. Force-aware policies receive three-axis force and torque measurements from a simulated sensor between the arm and parallel-jaw gripper; MimicGen measurements are recovered by restoring recorded simulator states. ManiSkill additionally sums the 3D force magnitudes over all gripper contacts using mj_contactForce, giving seven force-related channels versus six for MimicGen. We report task success rates on independently generated scene configurations.",
+      "excerpts": [
+        [
+          "We evaluate SPECTRA",
+          "50 for gate calibration."
+        ],
+        [
+          "We report task success rates",
+          "independently generated scene configurations."
+        ]
+      ],
+      "text": "We evaluate SPECTRA on four ManiSkill Mu et al. (2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. We report task success rates on independently generated scene configurations."
     },
     {
       "type": "paragraph",
@@ -186,7 +85,14 @@
           594
         ]
       ],
-      "text": "We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space (Table 1). For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy. Ablations remove coefficient-wise spectral normalization and cross force conditioning with low-frequency and full-spectrum prediction to assess normalization and bandwidth-dependent force benefits. We also compare learned routing with fixed, random, force-threshold, and contact-triggered selection, holding the coarse and fine policies fixed."
+      "source_text": "We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space (Table 1). For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy. Ablations remove coefficient-wise spectral normalization and cross force conditioning with low-frequency and full-spectrum prediction to assess normalization and bandwidth-dependent force benefits. We also compare learned routing with fixed, random, force-threshold, and contact-triggered selection, holding the coarse and fine policies fixed.",
+      "excerpts": [
+        [
+          "We compare Diffusion Policy",
+          "force-conditioned full-spectrum policy."
+        ]
+      ],
+      "text": "We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space (Table 1). For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy."
     },
     {
       "type": "figure",
@@ -213,82 +119,9 @@
           684
         ]
       ],
+      "source_text": "Table 1 shows that SPECTRA outperforms force-blind action-space DP and FM on all six tasks. It achieves the highest success rates on PickCube, StackCube, Coffee, and Threading, and ties the best result on PlugCharger. Its mean success rate is 65.8%, compared with 52.9% for always using the fine policy and 50.0% for the strongest generic force-gating baseline, corresponding to gains of 12.9 and 15.8 percentage points, respectively. PegInsertionSide remains an exception: force-blind DCT-space FM achieves 45.0%, compared with 40.0% for SPECTRA.",
+      "excerpts": null,
       "text": "Table 1 shows that SPECTRA outperforms force-blind action-space DP and FM on all six tasks. It achieves the highest success rates on PickCube, StackCube, Coffee, and Threading, and ties the best result on PlugCharger. Its mean success rate is 65.8%, compared with 52.9% for always using the fine policy and 50.0% for the strongest generic force-gating baseline, corresponding to gains of 12.9 and 15.8 percentage points, respectively. PegInsertionSide remains an exception: force-blind DCT-space FM achieves 45.0%, compared with 40.0% for SPECTRA."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          5,
-          688,
-          734
-        ],
-        [
-          6,
-          466,
-          533
-        ]
-      ],
-      "text": "Matched comparisons reveal benefits from force feedback, which validate H1 (the value of force). On Threading, adding force raises action-space DP success from 7.5% to 50.0% and FM success from 25.0% to 52.5%. However, the same change reduces Coffee success from 77.5% to 62.5% for DP and from 65.0% to 50.0% for FM, motivating selective use of force. The improvement over always selecting the same fine policy supports H4 (learned policy selection) against the always-fine baseline: learned selection achieves higher success than using force-conditioned, full-spectrum prediction throughout execution. Generic force gating nevertheless provides mixed benefits: for DCT-space DP, it improves Threading success over always-on force from 67.5% to 77.5%, but reduces Coffee success from 75.0% to 57.5%. These results support the combined design of SPECTRA, which adapts force conditioning and action bandwidth together."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          6,
-          555,
-          645
-        ]
-      ],
-      "text": "We compare SPECTRA with and without coefficient-wise spectral normalization, alongside action-space and DCT-space diffusion baselines. Table 2 shows that normalization improves success on four of the five tasks and leaves PlugCharger performance unchanged. The largest gain is on StackCube, from 67.5% to 82.5%, followed by gains of 7.5 percentage points on both PickCube and Coffee. The complete method also outperforms the listed diffusion baselines on every task. These comparisons demonstrate consistent benefits to task success, which validate the task-success component of H2 (spectral noise balancing). Frequency-resolved prediction errors are still needed to establish whether normalization improves fine-action learning while preserving coarse-motion accuracy."
-    },
-    {
-      "type": "figure",
-      "page": 7,
-      "crop": [
-        107,
-        119,
-        505,
-        214
-      ],
-      "caption_bounds": [
-        84,
-        115
-      ],
-      "file": "site/static/media/spectral-normalization.png",
-      "caption": "Table 2: Effect of spectral signal-to-noise balancing. Task success (%) for diffusion baselines and SPECTRA variants. Spectral normalization improves SPECTRA on four tasks and preserves PlugCharger success. Bold denotes the highest success in each column."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          6,
-          667,
-          723
-        ],
-        [
-          7,
-          441,
-          508
-        ]
-      ],
-      "text": "We compare low-frequency and full-spectrum policies with and without force conditioning, keeping expert selection disabled to isolate the interaction between force and action bandwidth. Figure 3 shows that adding force provides no gain under low-frequency restriction, but improves full-spectrum success on four of five tasks. On PickCube, the effect of force changes from a 5-percentage-point decline to a 12.5-percentage-point gain when the full spectrum is available. StackCube is the exception: force leaves low-frequency performance unchanged and reduces full-spectrum success by 10 percentage points. These results validate H3 (force and action bandwidth) on four tasks, showing that access to finer motion detail can increase the benefit of force feedback. They motivate adapting force conditioning and action bandwidth together, while highlighting that full-spectrum prediction does not guarantee a benefit from force or establish its relevance exclusively to high-frequency motion."
-    },
-    {
-      "type": "figure",
-      "page": 7,
-      "crop": [
-        108,
-        259,
-        504,
-        380
-      ],
-      "caption_bounds": [
-        391,
-        433
-      ],
-      "file": "site/static/media/force-bandwidth.png",
-      "caption": "Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing."
     },
     {
       "type": "paragraph",
@@ -299,7 +132,14 @@
           612
         ]
       ],
-      "text": "We evaluate SPECTRA on an OpenArm robot equipped with a fixed camera and a wrist-mounted camera. Tasks include Jigglypuff placement, Coca-Cola placement, block stacking, wet-wipe extraction, and whiteboard erasing (Figure 4). Coca-Cola placement requires placing the can without making an audible sound, making gentle contact part of the success criterion. Whiteboard erasing measures the percentage of text removed; the other tasks are evaluated by task success. We compare against force-blind, action-space Diffusion Policy (DP) and flow matching (FM), with additional force-conditioning and representation comparisons reported in the appendix."
+      "source_text": "We evaluate SPECTRA on an OpenArm robot equipped with a fixed camera and a wrist-mounted camera. Tasks include Jigglypuff placement, Coca-Cola placement, block stacking, wet-wipe extraction, and whiteboard erasing (Figure 4). Coca-Cola placement requires placing the can without making an audible sound, making gentle contact part of the success criterion. Whiteboard erasing measures the percentage of text removed; the other tasks are evaluated by task success. We compare against force-blind, action-space Diffusion Policy (DP) and flow matching (FM), with additional force-conditioning and representation comparisons reported in the appendix.",
+      "excerpts": [
+        [
+          "We evaluate SPECTRA",
+          "a wrist-mounted camera."
+        ]
+      ],
+      "text": "We evaluate SPECTRA on an OpenArm robot equipped with a fixed camera and a wrist-mounted camera."
     },
     {
       "type": "paragraph",
@@ -310,34 +150,14 @@
           734
         ]
       ],
-      "text": "We evaluate SPECTRA on an OpenArm robot equipped with a fixed camera and a wrist-mounted camera across five tasks: Jigglypuff placement, Coca-Cola placement, block stacking, wet-wipe extraction, and whiteboard erasing (Figure 4). For each task, we collect 80 demonstration episodes, using 40 for policy training and 40 for gate calibration. Coca-Cola placement additionally requires placing the can without an audible contact sound, making gentle placement part of the success criterion. We evaluate whiteboard erasing by the percentage of text removed and the remaining tasks by success rate. We compare against force-blind, action-space Diffusion Policy (DP) and flow matching (FM), with additional comparisons of force conditioning and action representation provided in the appendix."
-    },
-    {
-      "type": "figure",
-      "page": 8,
-      "crop": [
-        108,
-        81,
-        504,
-        500
-      ],
-      "caption_bounds": [
-        503,
-        525
-      ],
-      "file": "site/static/media/real-robot-tasks.png",
-      "caption": "Figure 4: Real-robot tasks. Four chronological stages of each task, observed from fixed and wrist-mounted cameras."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
+      "source_text": "We evaluate SPECTRA on an OpenArm robot equipped with a fixed camera and a wrist-mounted camera across five tasks: Jigglypuff placement, Coca-Cola placement, block stacking, wet-wipe extraction, and whiteboard erasing (Figure 4). For each task, we collect 80 demonstration episodes, using 40 for policy training and 40 for gate calibration. Coca-Cola placement additionally requires placing the can without an audible contact sound, making gentle placement part of the success criterion. We evaluate whiteboard erasing by the percentage of text removed and the remaining tasks by success rate. We compare against force-blind, action-space Diffusion Policy (DP) and flow matching (FM), with additional comparisons of force conditioning and action representation provided in the appendix.",
+      "excerpts": [
         [
-          8,
-          550,
-          595
+          "For each task,",
+          "the remaining tasks by success rate."
         ]
       ],
-      "text": "The five tasks test distinct demands on force-aware control. Jigglypuff placement and block stacking require accurate positioning and controlled release, while Coca-Cola placement requires gentle contact without audible sound. For wet-wipe extraction, a drop in resistance can signal complete removal. Whiteboard erasing requires sustained contact and consistent pressure against the board."
+      "text": "For each task, we collect 80 demonstration episodes, using 40 for policy training and 40 for gate calibration. Coca-Cola placement additionally requires placing the can without an audible contact sound, making gentle placement part of the success criterion. We evaluate whiteboard erasing by the percentage of text removed and the remaining tasks by success rate."
     },
     {
       "type": "figure",
@@ -364,51 +184,53 @@
           689
         ]
       ],
-      "text": "Figure 5 shows that SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%. Together with matched simulation comparisons, these results support H1 (the value of force). The physical experiments evaluate the complete framework, while simulation ablations isolate the contributions of force conditioning, action bandwidth, and spectral normalization."
+      "source_text": "Figure 5 shows that SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%. Together with matched simulation comparisons, these results support H1 (the value of force). The physical experiments evaluate the complete framework, while simulation ablations isolate the contributions of force conditioning, action bandwidth, and spectral normalization.",
+      "excerpts": [
+        [
+          "Figure 5 shows",
+          "below FM’s 90%."
+        ]
+      ],
+      "text": "Figure 5 shows that SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%."
+    },
+    {
+      "type": "figure",
+      "page": 7,
+      "crop": [
+        108,
+        259,
+        504,
+        380
+      ],
+      "caption_bounds": [
+        391,
+        433
+      ],
+      "file": "site/static/media/force-bandwidth.png",
+      "caption": "Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing."
     },
     {
       "type": "paragraph",
       "source_rects": [
         [
-          9,
-          268,
-          336
-        ]
-      ],
-      "text": "SPECTRA jointly adapts force conditioning and action bandwidth by selecting between coarse force-blind and full-spectrum force-conditioned policies. Spectral normalization balances signal-to-noise ratios, while held-out prediction errors supervise selection without manually labeled contact phases. Simulation and real-robot experiments demonstrate gains across multiple tasks. Ablations support spectral normalization and show greater force benefits with full-spectrum prediction on four of five tasks."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
+          6,
+          667,
+          723
+        ],
         [
-          9,
-          340,
-          386
+          7,
+          441,
+          508
         ]
       ],
-      "text": "Limitations and Future Work. Performance remains task dependent, and offline prediction errors may not fully reflect execution success. The gate also selects between two policies with fixed spectral support. Future work will explore outcome-based gate supervision, adaptive action bandwidth, and generalization to new objects, sensing conditions, and robot platforms."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
+      "source_text": "We compare low-frequency and full-spectrum policies with and without force conditioning, keeping expert selection disabled to isolate the interaction between force and action bandwidth. Figure 3 shows that adding force provides no gain under low-frequency restriction, but improves full-spectrum success on four of five tasks. On PickCube, the effect of force changes from a 5-percentage-point decline to a 12.5-percentage-point gain when the full spectrum is available. StackCube is the exception: force leaves low-frequency performance unchanged and reduces full-spectrum success by 10 percentage points. These results validate H3 (force and action bandwidth) on four tasks, showing that access to finer motion detail can increase the benefit of force feedback. They motivate adapting force conditioning and action bandwidth together, while highlighting that full-spectrum prediction does not guarantee a benefit from force or establish its relevance exclusively to high-frequency motion.",
+      "excerpts": [
         [
-          10,
-          103,
-          171
+          "We compare low-frequency",
+          "full-spectrum success by 10 percentage points."
         ]
       ],
-      "text": "We use generative AI tools, including ChatGPT and Codex, to assist with language polishing, code development, and figure design, layout, and formatting. The authors are responsible for the research ideas, methodology, experimental design, and interpretation of results, and review and revise AI-assisted material before inclusion. Reported experimental results come from policy evaluations rather than AI-generated estimates. Generative AI is not a component of the deployed SPECTRA policy. The authors take full responsibility for the final text, technical claims, code, and figures."
-    },
-    {
-      "type": "paragraph",
-      "source_rects": [
-        [
-          10,
-          200,
-          301
-        ]
-      ],
-      "text": "Section 3 describes the spectral action representation, coefficient-wise normalization, coarse and fine policies, and supervised gate calibration. Sections 4.1 and 4.2 describe the simulation and real-robot experiments, baselines, ablations, and evaluation metrics. Appendix A details the demonstration budget, force-measurement provenance, data splits, and evaluation initializations. Appendix B documents implementation settings, distinguishing source defaults from unresolved final configurations. Appendices C and D provide the analyses of torque variation and spectral signal-to-noise balancing, respectively. Appendix E reports the complete real-robot comparisons, and Appendix F describes the simulation tasks. Together, these materials specify the method and evaluation protocol while identifying implementation details that remain to be finalized for complete reproduction."
+      "text": "We compare low-frequency and full-spectrum policies with and without force conditioning, keeping expert selection disabled to isolate the interaction between force and action bandwidth. Figure 3 shows that adding force provides no gain under low-frequency restriction, but improves full-spectrum success on four of five tasks. On PickCube, the effect of force changes from a 5-percentage-point decline to a 12.5-percentage-point gain when the full spectrum is available. StackCube is the exception: force leaves low-frequency performance unchanged and reduces full-spectrum success by 10 percentage points."
     }
   ]
 }

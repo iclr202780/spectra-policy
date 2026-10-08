@@ -38,6 +38,7 @@ figure > a { display: block; }
 figure img { display: block; width: 100%; height: auto; margin: 0 auto; }
 figcaption { margin: 12px 0 0; font-size: 14px; line-height: 1.5; text-align: justify; }
 #simulation figure { width: 80%; margin-inline: auto; }
+#real-robot { margin-top: 48px; }
 .equation { margin: 24px 0; overflow-x: auto; overflow-y: hidden; padding: 8px 2px; }
 .equation .katex-display { margin: 0; }
 #BibTeX h2 { text-align: left; }
