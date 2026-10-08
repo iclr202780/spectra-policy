@@ -34,7 +34,6 @@ ul { margin: 0 0 24px; padding-left: 24px; }
 li { margin-bottom: 8px; }
 figure { margin: 24px 0; text-align: center; }
 figure:last-child { margin-bottom: 0; }
-figure > a { display: block; }
 figure img { display: block; width: 100%; height: auto; margin: 0 auto; }
 figcaption { margin: 12px 0 0; font-size: 14px; line-height: 1.5; text-align: justify; }
 #simulation figure { width: 80%; margin-inline: auto; }

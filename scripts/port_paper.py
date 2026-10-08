@@ -54,7 +54,7 @@ def figure(name,page,rect,caption_bounds):
     CONTENT.append({'type':'figure','page':page,'crop':rect,'caption_bounds':caption_bounds,
                     'file':str(dest.relative_to(ROOT)),'caption':caption})
     alt=caption.split('. ')[0]
-    return f'<figure><a href="static/media/{name}.png" aria-label="{html.escape(alt)} — full size"><img src="static/media/{name}.png" width="{pix.width}" height="{pix.height}" alt="{html.escape(alt)}" loading="lazy" decoding="async"></a><figcaption>{html.escape(caption)}</figcaption></figure>\n'
+    return f'<figure><img src="static/media/{name}.png" width="{pix.width}" height="{pix.height}" alt="{html.escape(alt)}" loading="lazy" decoding="async"><figcaption>{html.escape(caption)}</figcaption></figure>\n'
 
 def section(key,title,body):
     return f'<section id="{key}" aria-labelledby="{key}-title">\n<h2 id="{key}-title">{title}</h2><hr>\n<div class="section-body">\n{body}</div>\n</section>\n'
@@ -96,8 +96,7 @@ def simulation_table():
         parts.append('</tbody>')
     parts.extend(['</table></div>',
                   '<h3>Policy Architectures</h3>',
-                  '<a href="static/media/policy-architectures.png" aria-label="Policy architectures — full size">',
-                  f'<img src="static/media/policy-architectures.png" width="{pix.width}" height="{pix.height}" alt="(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA" loading="lazy" decoding="async"></a>',
+                  f'<img src="static/media/policy-architectures.png" width="{pix.width}" height="{pix.height}" alt="(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA" loading="lazy" decoding="async">',
                   f'<figcaption id="simulation-table-caption">{html.escape(caption)}</figcaption></figure>'])
     return '\n'.join(parts)+'\n'
 
