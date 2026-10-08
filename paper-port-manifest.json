@@ -369,20 +369,89 @@
       "text": "Figure 5 shows that SPECTRA outperforms force-blind DP and FM on four of five tasks. Wet-wipe extraction reaches 100% success, compared with 50% for DP and 70% for FM; quiet Coca-Cola placement reaches 90%, versus 80% for both baselines. Whiteboard erasing removes 89.5% of the text, compared with 77.5% for DP and 68.5% for FM. Jigglypuff placement is the exception: SPECTRA achieves 80% success, exceeding DP but below FM’s 90%."
     },
     {
-      "type": "figure",
+      "type": "table",
       "page": 7,
-      "crop": [
+      "source_rect": [
         108,
         259,
         504,
         380
       ],
+      "source_file": "scripts/force_bandwidth_table.json",
+      "data": {
+        "rows": [
+          {
+            "task": "PegInsertionSide",
+            "low": [
+              "25",
+              "20",
+              "-5"
+            ],
+            "full": [
+              "25",
+              "27.5",
+              "+2.5"
+            ]
+          },
+          {
+            "task": "PickCube",
+            "low": [
+              "42.5",
+              "37.5",
+              "-5"
+            ],
+            "full": [
+              "50",
+              "62.5",
+              "+12.5"
+            ]
+          },
+          {
+            "task": "StackCube",
+            "low": [
+              "65",
+              "65",
+              "0"
+            ],
+            "full": [
+              "75",
+              "65",
+              "-10"
+            ]
+          },
+          {
+            "task": "Coffee",
+            "low": [
+              "57.5",
+              "47.5",
+              "-10"
+            ],
+            "full": [
+              "67.5",
+              "75",
+              "+7.5"
+            ]
+          },
+          {
+            "task": "Threading",
+            "low": [
+              "52.5",
+              "47.5",
+              "-5"
+            ],
+            "full": [
+              "60",
+              "67.5",
+              "+7.5"
+            ]
+          }
+        ]
+      },
+      "caption": "Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing.",
       "caption_bounds": [
         391,
         433
-      ],
-      "file": "site/static/media/force-bandwidth.png",
-      "caption": "Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing."
+      ]
     },
     {
       "type": "paragraph",

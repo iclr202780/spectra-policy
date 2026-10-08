@@ -101,6 +101,43 @@ def simulation_table():
                   f'<figcaption id="simulation-table-caption">{html.escape(caption)}</figcaption></figure>'])
     return '\n'.join(parts)+'\n'
 
+def force_bandwidth_table():
+    source_file='scripts/force_bandwidth_table.json'
+    data=json.loads((ROOT/source_file).read_text())
+    caption=extract(7,391,433)
+    CONTENT.append({'type':'table','page':7,'source_rect':[108,259,504,380],
+                    'source_file':source_file,'data':data,'caption':caption,
+                    'caption_bounds':[391,433]})
+    parts=['<figure class="force-bandwidth-table">',
+           '<div class="table-scroll" role="region" aria-label="Force feedback and action bandwidth results, scroll horizontally on small screens" tabindex="0">',
+           '<table class="results-table bandwidth-table" aria-describedby="force-bandwidth-caption">',
+           '<caption class="sr-only">Figure 3: Force benefits depend on action bandwidth</caption>',
+           '<colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>',
+           '<thead><tr><th scope="col" rowspan="2">Task</th>',
+           '<th scope="colgroup" colspan="2">Low-frequency</th><th scope="colgroup" colspan="2">Full-spectrum</th></tr>',
+           '<tr><th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th>',
+           '<th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th></tr></thead><tbody>']
+    for row in data['rows']:
+        parts.append('<tr><th scope="row">'+html.escape(row['task'])+'</th>')
+        for band in ('low','full'):
+            before,after,gain=row[band]
+            delta=float(gain)
+            assert abs(float(after)-float(before)-delta)<1e-9
+            assert abs(delta)<=15
+            # Identical -15 to +15 pp scales for both columns; text is accessible,
+            # while these decorative CSS bars preserve the paper's visual comparison.
+            width=abs(delta)/30*100
+            left=50-width if delta<0 else 50
+            parts.append(f'<td>{before} → {after}</td>')
+            parts.append(f'<td><span class="gain-cell"><span>{gain}</span>'
+                         '<span class="gain-track" aria-hidden="true">'
+                         f'<span class="gain-bar" style="left: {left:g}%; width: {width:g}%"></span>'
+                         '</span></span></td>')
+        parts.append('</tr>')
+    parts.extend(['</tbody></table></div>',
+                  f'<figcaption id="force-bandwidth-caption">{html.escape(caption)}</figcaption></figure>'])
+    return '\n'.join(parts)+'\n'
+
 abstract=paragraph((1,214,386))
 architecture=figure('architecture',3,[100,81,513,324],[329,380])
 architecture+=paragraph((1,688,734),(2,285,341),excerpts=[
@@ -122,7 +159,7 @@ real+=figure('real-robot-results',9,[108,81,504,200],[209,241])
 real+=paragraph((8,599,689),excerpts=[
     ('Figure 5 shows','below FM’s 90%.')])
 real+=(ROOT/'scripts/real_robot_videos.html').read_text()+'</div>\n'
-interaction=figure('force-bandwidth',7,[108,259,504,380],[391,433])
+interaction=force_bandwidth_table()
 interaction+=paragraph((6,667,723),(7,441,508),excerpts=[
     ('We compare low-frequency','full-spectrum success by 10 percentage points.')])
 body=''.join([
@@ -142,4 +179,4 @@ manifest={'source_sha256':SOURCE_HASH,'scope':'Selected verbatim passages: abstr
 (ROOT/'paper-port-manifest.json').write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+'\n')
 assert hashlib.sha256(SOURCE.read_bytes()).hexdigest()==SOURCE_HASH
 assert not list((ROOT/'site').rglob('*.pdf'))
-print('Generated curated project page with verbatim excerpts, an HTML results table, paper figures, and 2 short videos.')
+print('Generated curated project page with verbatim excerpts, 2 HTML results tables, paper figures, and 2 short videos.')

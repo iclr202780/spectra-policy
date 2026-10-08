@@ -201,7 +201,47 @@
 <section id="force-bandwidth" aria-labelledby="force-bandwidth-title">
 <h2 id="force-bandwidth-title">When Force Feedback Helps</h2><hr>
 <div class="section-body">
-<figure><a href="static/media/force-bandwidth.png" aria-label="Figure 3: Force benefits depend on action bandwidth — full size"><img src="static/media/force-bandwidth.png" width="1188" height="363" alt="Figure 3: Force benefits depend on action bandwidth" loading="lazy" decoding="async"></a><figcaption>Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing.</figcaption></figure>
+<figure class="force-bandwidth-table">
+<div class="table-scroll" role="region" aria-label="Force feedback and action bandwidth results, scroll horizontally on small screens" tabindex="0">
+<table class="results-table bandwidth-table" aria-describedby="force-bandwidth-caption">
+<caption class="sr-only">Figure 3: Force benefits depend on action bandwidth</caption>
+<colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>
+<thead><tr><th scope="col" rowspan="2">Task</th>
+<th scope="colgroup" colspan="2">Low-frequency</th><th scope="colgroup" colspan="2">Full-spectrum</th></tr>
+<tr><th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th>
+<th scope="col">No force → With force (%)</th><th scope="col">Gain (pp)</th></tr></thead><tbody>
+<tr><th scope="row">PegInsertionSide</th>
+<td>25 → 20</td>
+<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
+<td>25 → 27.5</td>
+<td><span class="gain-cell"><span>+2.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 8.33333%"></span></span></span></td>
+</tr>
+<tr><th scope="row">PickCube</th>
+<td>42.5 → 37.5</td>
+<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
+<td>50 → 62.5</td>
+<td><span class="gain-cell"><span>+12.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 41.6667%"></span></span></span></td>
+</tr>
+<tr><th scope="row">StackCube</th>
+<td>65 → 65</td>
+<td><span class="gain-cell"><span>0</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 0%"></span></span></span></td>
+<td>75 → 65</td>
+<td><span class="gain-cell"><span>-10</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 16.6667%; width: 33.3333%"></span></span></span></td>
+</tr>
+<tr><th scope="row">Coffee</th>
+<td>57.5 → 47.5</td>
+<td><span class="gain-cell"><span>-10</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 16.6667%; width: 33.3333%"></span></span></span></td>
+<td>67.5 → 75</td>
+<td><span class="gain-cell"><span>+7.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 25%"></span></span></span></td>
+</tr>
+<tr><th scope="row">Threading</th>
+<td>52.5 → 47.5</td>
+<td><span class="gain-cell"><span>-5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 33.3333%; width: 16.6667%"></span></span></span></td>
+<td>60 → 67.5</td>
+<td><span class="gain-cell"><span>+7.5</span><span class="gain-track" aria-hidden="true"><span class="gain-bar" style="left: 50%; width: 25%"></span></span></span></td>
+</tr>
+</tbody></table></div>
+<figcaption id="force-bandwidth-caption">Figure 3: Force benefits depend on action bandwidth. Entries report success (%): without force →with force. Bars show the corresponding change in percentage points on a shared scale. Force improves full-spectrum success on four tasks but provides no gain under low-frequency restriction. All policies are evaluated without expert routing.</figcaption></figure>
 <p>We compare low-frequency and full-spectrum policies with and without force conditioning, keeping expert selection disabled to isolate the interaction between force and action bandwidth. Figure 3 shows that adding force provides no gain under low-frequency restriction, but improves full-spectrum success on four of five tasks. On PickCube, the effect of force changes from a 5-percentage-point decline to a 12.5-percentage-point gain when the full spectrum is available. StackCube is the exception: force leaves low-frequency performance unchanged and reduces full-spectrum success by 10 percentage points.</p>
 </div>
 </section>

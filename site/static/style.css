@@ -54,6 +54,14 @@ figcaption { margin: 12px 0 0; font-size: 14px; line-height: 1.5; text-align: ju
 .results-table .spectra { border-top: 1px solid #222; }
 .results-table .spectra th[scope="row"] { font-weight: 700; }
 .results-table .spectra tr > * { padding-top: 8px; }
+.bandwidth-table { min-width: 780px; }
+.bandwidth-table th, .bandwidth-table td { padding: 10px 8px; }
+.bandwidth-table thead tr:last-child th { font-size: 16px; font-weight: 400; }
+.gain-cell { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.gain-cell > span:first-child { width: 4ch; text-align: right; }
+.gain-track { position: relative; display: block; flex: 0 0 88px; height: 20px; }
+.gain-track::before { content: ''; position: absolute; left: 50%; top: -10px; bottom: -10px; border-left: 1px solid #aaa; }
+.gain-bar { position: absolute; top: 2px; bottom: 2px; background: #555; }
 #real-robot { margin-top: 48px; }
 .equation { margin: 24px 0; overflow-x: auto; overflow-y: hidden; padding: 8px 2px; }
 .equation .katex-display { margin: 0; }
