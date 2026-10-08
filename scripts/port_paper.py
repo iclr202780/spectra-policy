@@ -3,7 +3,8 @@
 Requires PyMuPDF for authoring only. The source PDF is never modified or served.
 Prose and captions are extracted from recorded source rectangles; only PDF line
 wraps are normalized. Excerpts select complete original sentences without
-rewriting them. The manifest records both source passages and selections.
+rewriting them, apart from explicitly recorded citation-formatting corrections.
+The manifest records both source passages and selections.
 """
 from pathlib import Path
 import re, html, hashlib, json
@@ -25,7 +26,7 @@ def clean(s):
 def extract(page,y0,y1):
     return clean(DOC[page-1].get_textbox(pdf.Rect(103,y0,510,y1)))
 
-def paragraph(*rects, excerpts=None):
+def paragraph(*rects, excerpts=None, citation_corrections=()):
     source_text=' '.join(extract(*r) for r in rects)
     text=source_text
     if excerpts:
@@ -35,8 +36,14 @@ def paragraph(*rects, excerpts=None):
             last=source_text.index(end,first)+len(end)
             selected.append(source_text[first:last])
         text=' '.join(selected)
-    CONTENT.append({'type':'paragraph','source_rects':rects,
-                    'source_text':source_text,'excerpts':excerpts,'text':text})
+    for original,corrected in citation_corrections:
+        assert text.count(original)==1
+        text=text.replace(original,corrected)
+    entry={'type':'paragraph','source_rects':rects,
+           'source_text':source_text,'excerpts':excerpts,'text':text}
+    if citation_corrections:
+        entry['citation_corrections']=citation_corrections
+    CONTENT.append(entry)
     return '<p>'+html.escape(text)+'</p>\n'
 
 def bullets(page,y0,y1):
@@ -144,7 +151,8 @@ architecture+=paragraph((1,688,734),(2,285,341),excerpts=[
 simulation='<div id="simulation">\n<h3>Simulation Experiments</h3>\n'
 simulation+=paragraph((5,382,482),excerpts=[
     ('We evaluate SPECTRA','50 for gate calibration.'),
-    ('We report task success rates','independently generated scene configurations.')])
+    ('We report task success rates','independently generated scene configurations.')],
+    citation_corrections=[('ManiSkill Mu et al. (2021) tasks','ManiSkill (Mu et al., 2021) tasks')])
 simulation+=paragraph((5,505,594),excerpts=[
     ('We compare Diffusion Policy','force-conditioned full-spectrum policy.')])
 simulation+=simulation_table()

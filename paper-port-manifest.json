@@ -74,7 +74,13 @@
           "independently generated scene configurations."
         ]
       ],
-      "text": "We evaluate SPECTRA on four ManiSkill Mu et al. (2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. We report task success rates on independently generated scene configurations."
+      "text": "We evaluate SPECTRA on four ManiSkill (Mu et al., 2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. We report task success rates on independently generated scene configurations.",
+      "citation_corrections": [
+        [
+          "ManiSkill Mu et al. (2021) tasks",
+          "ManiSkill (Mu et al., 2021) tasks"
+        ]
+      ]
     },
     {
       "type": "paragraph",

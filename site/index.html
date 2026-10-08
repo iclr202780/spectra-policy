@@ -34,7 +34,7 @@
 <div class="section-body">
 <div id="simulation">
 <h3>Simulation Experiments</h3>
-<p>We evaluate SPECTRA on four ManiSkill Mu et al. (2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. We report task success rates on independently generated scene configurations.</p>
+<p>We evaluate SPECTRA on four ManiSkill (Mu et al., 2021) tasks (PegInsertionSide, PickCube, PlugCharger, and StackCube) and two MimicGen tasks (Coffee and Threading). Each task uses 100 demonstration episodes: 50 for policy training and 50 for gate calibration. We report task success rates on independently generated scene configurations.</p>
 <p>We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space (Table 1). For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy.</p>
 <figure class="simulation-table">
 <div class="table-scroll" role="region" aria-label="Simulation success rates, scroll horizontally on small screens" tabindex="0">
