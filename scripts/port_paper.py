@@ -59,6 +59,48 @@ def figure(name,page,rect,caption_bounds):
 def section(key,title,body):
     return f'<section id="{key}" aria-labelledby="{key}-title">\n<h2 id="{key}-title">{title}</h2><hr>\n<div class="section-body">\n{body}</div>\n</section>\n'
 
+def simulation_table():
+    source_file='scripts/simulation_table.json'
+    data=json.loads((ROOT/source_file).read_text())
+    rows=[row for group in data['groups'] for row in group['rows']]
+    best=[max(float(row[i]) for row in rows) for i in range(2,8)]
+    caption=extract(6,436,458)
+    # Keep the original diagrams, separate from the selectable table cells.
+    crop=[108,84,505,202]
+    dest=ROOT/'site/static/media/policy-architectures.png'
+    pix=DOC[5].get_pixmap(matrix=pdf.Matrix(3,3),clip=pdf.Rect(*crop),alpha=False)
+    pix.save(dest)
+    CONTENT.append({'type':'table','page':6,'source_rect':[108,209,505,433],
+                    'source_file':source_file,'data':data,'caption':caption,
+                    'caption_bounds':[436,458],'architecture_crop':crop,
+                    'architecture_file':str(dest.relative_to(ROOT))})
+    parts=['<figure class="simulation-table">',
+           '<div class="table-scroll" role="region" aria-label="Simulation success rates, scroll horizontally on small screens" tabindex="0">',
+           '<table class="results-table" aria-describedby="simulation-table-caption">',
+           '<caption class="sr-only">Table 1: Policy architectures and simulation success rates (%)</caption>',
+           '<colgroup span="2"></colgroup><colgroup span="4"></colgroup><colgroup span="2"></colgroup>',
+           '<thead><tr><th scope="col" rowspan="2">Policy</th><th scope="col" rowspan="2">Space</th>',
+           '<th scope="colgroup" colspan="4">ManiSkill</th><th scope="colgroup" colspan="2">MimicGen</th></tr><tr>']
+    parts.extend('<th scope="col">'+html.escape(label).replace(' ','<br>')+'</th>' for label in data['columns'][2:])
+    parts.append('</tr></thead>')
+    for group in data['groups']:
+        parts.append(f'<tbody class="{group["class"]}">')
+        if len(group['rows'])>1:
+            parts.append(f'<tr class="group-heading"><th scope="rowgroup" colspan="8">{html.escape(group["label"])}</th></tr>')
+        for row in group['rows']:
+            parts.append('<tr><th scope="row">'+html.escape(row[0])+'</th><td>'+html.escape(row[1])+'</td>')
+            for i,value in enumerate(row[2:]):
+                text=f'<strong>{value}</strong>' if float(value)==best[i] else value
+                parts.append('<td>'+text+'</td>')
+            parts.append('</tr>')
+        parts.append('</tbody>')
+    parts.extend(['</table></div>',
+                  '<h3>Policy Architectures</h3>',
+                  '<a href="static/media/policy-architectures.png" aria-label="Policy architectures — full size">',
+                  f'<img src="static/media/policy-architectures.png" width="{pix.width}" height="{pix.height}" alt="(a) No force; (b) Always-on force; (c) Force gating; (d) SPECTRA" loading="lazy" decoding="async"></a>',
+                  f'<figcaption id="simulation-table-caption">{html.escape(caption)}</figcaption></figure>'])
+    return '\n'.join(parts)+'\n'
+
 abstract=paragraph((1,214,386))
 architecture=figure('architecture',3,[100,81,513,324],[329,380])
 architecture+=paragraph((1,688,734),(2,285,341),excerpts=[
@@ -69,7 +111,7 @@ simulation+=paragraph((5,382,482),excerpts=[
     ('We report task success rates','independently generated scene configurations.')])
 simulation+=paragraph((5,505,594),excerpts=[
     ('We compare Diffusion Policy','force-conditioned full-spectrum policy.')])
-simulation+=figure('simulation-results',6,[108,84,505,433],[436,458])
+simulation+=simulation_table()
 simulation+=paragraph((5,616,684))+'</div>\n'
 real='<div id="real-robot">\n<h3>Real-Robot Experiments</h3>\n'
 real+=paragraph((7,533,612),excerpts=[
@@ -100,4 +142,4 @@ manifest={'source_sha256':SOURCE_HASH,'scope':'Selected verbatim passages: abstr
 (ROOT/'paper-port-manifest.json').write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+'\n')
 assert hashlib.sha256(SOURCE.read_bytes()).hexdigest()==SOURCE_HASH
 assert not list((ROOT/'site').rglob('*.pdf'))
-print('Generated curated project page with verbatim excerpts, 4 paper visuals, and 2 short videos.')
+print('Generated curated project page with verbatim excerpts, an HTML results table, paper figures, and 2 short videos.')

@@ -95,20 +95,195 @@
       "text": "We compare Diffusion Policy (DP) and flow matching (FM) in action and DCT space (Table 1). For each configuration, No Force uses vision and proprioception, Always-on Force adds force throughout execution, and Force Gating selects between force-blind and force-aware policies with full action support. SPECTRA jointly selects sensing and motion detail through a force-blind low-frequency policy and a force-conditioned full-spectrum policy."
     },
     {
-      "type": "figure",
+      "type": "table",
       "page": 6,
-      "crop": [
+      "source_rect": [
         108,
-        84,
+        209,
         505,
         433
       ],
+      "source_file": "scripts/simulation_table.json",
+      "data": {
+        "columns": [
+          "Policy",
+          "Space",
+          "Peg Insertion",
+          "Pick Cube",
+          "Plug Charger",
+          "Stack Cube",
+          "Coffee",
+          "Threading"
+        ],
+        "groups": [
+          {
+            "label": "(a) No force",
+            "class": "no-force",
+            "rows": [
+              [
+                "DP",
+                "Action",
+                "30.0",
+                "55.0",
+                "10.0",
+                "60.0",
+                "77.5",
+                "7.5"
+              ],
+              [
+                "DP",
+                "DCT",
+                "25.0",
+                "50.0",
+                "22.5",
+                "75.0",
+                "67.5",
+                "60.0"
+              ],
+              [
+                "FM",
+                "Action",
+                "27.5",
+                "42.5",
+                "7.5",
+                "30.0",
+                "65.0",
+                "25.0"
+              ],
+              [
+                "FM",
+                "DCT",
+                "45.0",
+                "42.5",
+                "10.0",
+                "52.5",
+                "40.0",
+                "35.0"
+              ]
+            ]
+          },
+          {
+            "label": "(b) Always-on force",
+            "class": "always-force",
+            "rows": [
+              [
+                "DP",
+                "Action",
+                "35.0",
+                "57.5",
+                "12.5",
+                "55.0",
+                "62.5",
+                "50.0"
+              ],
+              [
+                "DP",
+                "DCT",
+                "27.5",
+                "62.5",
+                "20.0",
+                "65.0",
+                "75.0",
+                "67.5"
+              ],
+              [
+                "FM",
+                "Action",
+                "32.5",
+                "32.5",
+                "12.5",
+                "40.0",
+                "50.0",
+                "52.5"
+              ],
+              [
+                "FM",
+                "DCT",
+                "42.5",
+                "55.0",
+                "10.0",
+                "55.0",
+                "32.5",
+                "45.0"
+              ]
+            ]
+          },
+          {
+            "label": "(c) Force gating",
+            "class": "force-gating",
+            "rows": [
+              [
+                "DP",
+                "Action",
+                "37.5",
+                "57.5",
+                "32.5",
+                "52.5",
+                "57.5",
+                "62.5"
+              ],
+              [
+                "DP",
+                "DCT",
+                "27.5",
+                "62.5",
+                "25.0",
+                "50.0",
+                "57.5",
+                "77.5"
+              ],
+              [
+                "FM",
+                "Action",
+                "30.0",
+                "40.0",
+                "0.0",
+                "30.0",
+                "60.0",
+                "62.5"
+              ],
+              [
+                "FM",
+                "DCT",
+                "37.5",
+                "60.0",
+                "12.5",
+                "30.0",
+                "37.5",
+                "22.5"
+              ]
+            ]
+          },
+          {
+            "label": "(d) SPECTRA",
+            "class": "spectra",
+            "rows": [
+              [
+                "(d) SPECTRA",
+                "DCT",
+                "40.0",
+                "77.5",
+                "32.5",
+                "82.5",
+                "82.5",
+                "80.0"
+              ]
+            ]
+          }
+        ]
+      },
+      "caption": "Table 1: Policy architectures and simulation success rates (%). Matching colors and labels connect each architecture to its results. DP: diffusion policy; FM: flow matching. Best results are bold.",
       "caption_bounds": [
         436,
         458
       ],
-      "file": "site/static/media/simulation-results.png",
-      "caption": "Table 1: Policy architectures and simulation success rates (%). Matching colors and labels connect each architecture to its results. DP: diffusion policy; FM: flow matching. Best results are bold."
+      "architecture_crop": [
+        108,
+        84,
+        505,
+        202
+      ],
+      "architecture_file": "site/static/media/policy-architectures.png"
     },
     {
       "type": "paragraph",
